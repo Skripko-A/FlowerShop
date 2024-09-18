@@ -4,6 +4,7 @@ from datetime import datetime
 # Create your models here.
 
 
+
 class Occasion(models.Model):
     name = models.CharField(
         max_length=100,
@@ -56,6 +57,20 @@ class Person(models.Model):
         return f"{self.name}: {self.role}"
 
 
+class Flower(models.Model):
+    name = models.CharField(
+        max_length=100,
+        verbose_name="Название",
+    )
+
+    class Meta:
+        verbose_name = 'цветок'
+        verbose_name_plural = 'цветы'
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class Bouquet(models.Model):
     name = models.CharField(
         max_length=100,
@@ -78,6 +93,9 @@ class Bouquet(models.Model):
         related_name="bouquets",
         blank=True,
     )
+    flowers = models.ManyToManyField(
+        Flower, through='BouquetFlower'
+    )
 
     class Meta:
         verbose_name = 'букет'
@@ -85,6 +103,19 @@ class Bouquet(models.Model):
 
     def __str__(self):
         return f"{self.name}: {self.price}"
+
+
+class BouquetFlower(models.Model):
+    bouquet = models.ForeignKey(Bouquet, on_delete=models.CASCADE)
+    flower = models.ForeignKey(Flower, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+
+    class Meta:
+        verbose_name = 'цветы в букете'
+        verbose_name_plural = 'цветы в букете'
+
+    def __str__(self):
+        return f'{self.quantity} x {self.flower.name} in {self.bouquet.name}'
 
 
 class Price_range(models.Model):
