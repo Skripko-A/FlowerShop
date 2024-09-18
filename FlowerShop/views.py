@@ -11,9 +11,9 @@ def show_catalog(request):
     return render(request, 'catalog.html', context)
 
 
-def show_order(request):
+def show_delivery(request):
     context={}
-    return render(request, 'order.html', context)
+    return render(request, 'delivery.html', context)
 
 
 def show_card(request):
@@ -23,3 +23,8 @@ def show_card(request):
 def show_consultation(request):
     context={}
     return render(request, 'consultation.html', context)
+
+
+def show_payment(request):
+    context = {}
+    return render(request, 'payment.html', context)
