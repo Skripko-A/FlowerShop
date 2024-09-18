@@ -28,3 +28,18 @@ def show_consultation(request):
 def show_payment(request):
     context = {}
     return render(request, 'payment.html', context)
+
+
+def show_quiz(request):
+    context = {}
+    return render(request, 'quiz.html', context)
+
+
+def show_quiz_step(request):
+    context = {}
+    return render(request, 'quiz-step.html', context)
+
+
+def show_result(request):
+    context = {}
+    return render(request, 'result.html', context)
