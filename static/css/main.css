@@ -44,12 +44,15 @@ input::placeholder {
 .btn {
 	background: #17CF97;
 	border-radius: 40px;
+	display: inline-block;
+	padding: 10px 20px;
 	font-weight: 500;
 	font-size: 16px;
-	line-height: 103.52%;
+	line-height: 2.2;
 	color: #FFFFFF;
 	border: none;
 	cursor: pointer;
+	text-align: center;
 }
 .btn:hover {
 	background: #14A87B;
