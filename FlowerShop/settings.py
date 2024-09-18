@@ -3,6 +3,26 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+       os.path.join(BASE_DIR, 'static'),
+   ]
+
+STATICFILES_FINDERS = (
+
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+
+)
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'
+
 SECRET_KEY = 'django-insecure-g!8+sgr=j984f3jbs0+84&ce6fkb*s7z(engr$y0)afsq9j1e!'
 
 DEBUG = True

@@ -14,3 +14,12 @@ def show_catalog(request):
 def show_order(request):
     context={}
     return render(request, 'order.html', context)
+
+
+def show_card(request):
+    context={}
+    return render(request, 'card.html', context)
+
+def show_consultation(request):
+    context={}
+    return render(request, 'consultation.html', context)
