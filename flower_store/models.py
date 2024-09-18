@@ -94,7 +94,9 @@ class Bouquet(models.Model):
         blank=True,
     )
     flowers = models.ManyToManyField(
-        Flower, through='BouquetFlower'
+        Flower,
+        through="BouquetFlower",
+        related_name="bouquets",
     )
 
     class Meta:
@@ -106,8 +108,8 @@ class Bouquet(models.Model):
 
 
 class BouquetFlower(models.Model):
-    bouquet = models.ForeignKey(Bouquet, on_delete=models.CASCADE)
-    flower = models.ForeignKey(Flower, on_delete=models.CASCADE)
+    bouquet = models.ForeignKey(Bouquet, on_delete=models.CASCADE, related_name='bouquet_flowers')
+    flower = models.ForeignKey(Flower, on_delete=models.CASCADE, related_name='flower_bouquets')
     quantity = models.PositiveIntegerField()
 
     class Meta:
