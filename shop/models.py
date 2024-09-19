@@ -50,7 +50,6 @@ class Consultation(models.Model):
         return statuses[self.consultation_status]
 
 
-
 class Order(models.Model):
     TIME_PERIODS = (
         ('01', 'Как можно скорее'),
@@ -173,6 +172,14 @@ class Bouquet(models.Model):
     title = models.CharField('название букета', max_length=200, blank=True)
     description = models.TextField(
         'описание букета',
+        blank=True,
+    )
+    composition = models.TextField(
+        'состав букета',
+        blank=True,
+    )
+    size = models.TextField(
+        'размер букета',
         blank=True,
     )
     picture = models.ImageField(
