@@ -27,7 +27,7 @@ class Consultation(models.Model):
     client = models.ForeignKey(
         'Person',
         verbose_name='клиент',
-        related_name='orders',
+        related_name='consultations',
         null=True,
         on_delete=models.SET_NULL,
     )    
