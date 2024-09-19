@@ -4,7 +4,7 @@ from django.db import models
 class OrderedBouquet(models.Model):
     order = models.ForeignKey(
         'Order',
-        related_name='ordered_cakes',
+        related_name='ordered_bouquets',
         verbose_name='заказы',
         null=True,
         on_delete=models.SET_NULL,
@@ -17,6 +17,30 @@ class OrderedBouquet(models.Model):
         on_delete=models.SET_NULL,
     )
     quantity = models.IntegerField(verbose_name='Количество букетов', default=1)
+
+
+class Consultation(models.Model):
+    STATUSES = (
+        ('01', 'Оформлена'),
+        ('02', 'Обработана'),
+    )    
+    client = models.ForeignKey(
+        'Person',
+        verbose_name='клиент',
+        related_name='orders',
+        null=True,
+        on_delete=models.SET_NULL,
+    )    
+    create_time = models.DateTimeField(
+        verbose_name='время создания',
+        auto_now_add=True
+    )
+    order_status = models.CharField(
+        verbose_name='статус консультации',
+        max_length=2,
+        choices=STATUSES,
+        default='01',
+    )
 
 
 class Order(models.Model):
@@ -55,10 +79,10 @@ class Order(models.Model):
         'Адрес квартиры',
         help_text='ул. Подольских курсантов д.5 кв.4'
      )
-    order_price = models.FloatField(
-        blank=True,
-        null=True,
+    order_price = models.DecimalField(
+        max_digits=19,
         verbose_name='Сумма заказа',
+        decimal_places=2,
     )
     create_time = models.DateTimeField(
         verbose_name='время создания',
@@ -80,7 +104,6 @@ class Order(models.Model):
         choices=STATUSES,
         default='01',
     )
-#    phone = models.CharField('Телефон для доставщика', max_length=12, unique=True)
 
     def __str__(self):
         delivery_date = str(self.delivery_date)
@@ -154,7 +177,7 @@ class Bouquet(models.Model):
         verbose_name='Цена букета',
         decimal_places=2,
     )
-    recomend = models.BooleanField('рекомендуемый торт', default=False)
+    recomend = models.BooleanField('рекомендуемый букет', default=False)
     events = models.ManyToManyField(
         'Event',
         verbose_name='события',
