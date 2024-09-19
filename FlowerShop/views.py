@@ -1,13 +1,25 @@
 from django.shortcuts import render
+from shop.models import (
+    Bouquet,
+    Order,
+    OrderedBouquet,
+    Store,
+    Event,
+    Person,
+    Price_range,
+    Consultation,
+)
 
 
 def show_main(request):
-    context={}
+    context = {
+        'bouquets_recommended': Bouquet.objects.get_recommended()
+    }
     return render(request, 'index.html', context)
 
 
 def show_catalog(request):
-    context={}
+    context = {}
     return render(request, 'catalog.html', context)
 
 

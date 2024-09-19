@@ -20,7 +20,7 @@ class OrderedBouquetInline(admin.TabularInline):
 
 @admin.register(Bouquet)
 class BouquetAdmin(admin.ModelAdmin):
-    fields = ['title', 'description', 'price', 'picture', 'recomend', 'preview', 'events']
+    fields = ['title', 'description', 'price', 'picture', 'recomend', 'preview', 'events', 'composition', 'size']
     search_fields = [
         'title',
         'recomend',
@@ -76,6 +76,9 @@ class ConsultationAdmin(admin.ModelAdmin):
         'create_time',
         'client',
         'consultation_status',
+    ]
+    readonly_fields = [
+        'create_time',
     ]
 
 
