@@ -23,14 +23,14 @@ class Consultation(models.Model):
     STATUSES = (
         ('01', 'Оформлена'),
         ('02', 'Обработана'),
-    )    
+    )
     client = models.ForeignKey(
         'Person',
         verbose_name='клиент',
         related_name='consultations',
         null=True,
         on_delete=models.SET_NULL,
-    )    
+    )
     create_time = models.DateTimeField(
         verbose_name='время создания',
         auto_now_add=True
