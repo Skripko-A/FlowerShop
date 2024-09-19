@@ -35,12 +35,20 @@ class Consultation(models.Model):
         verbose_name='время создания',
         auto_now_add=True
     )
-    order_status = models.CharField(
+    consultation_status = models.CharField(
         verbose_name='статус консультации',
         max_length=2,
         choices=STATUSES,
         default='01',
     )
+
+    def get_status(self):
+        statuses = {
+            '01': 'Оформлена',
+            '02': 'Обработана',
+        }
+        return statuses[self.consultation_status]
+
 
 
 class Order(models.Model):

@@ -7,6 +7,7 @@ from shop.models import (
     Event,
     Person,
     Price_range,
+    Consultation,
 )
 from shop.image_preview import image_preview
 
@@ -61,6 +62,20 @@ class Price_rangeAdmin(admin.ModelAdmin):
     list_display = [
         'price_min',
         'price_max',
+    ]
+
+
+@admin.register(Consultation)
+class ConsultationAdmin(admin.ModelAdmin):
+    search_fields = [
+        'create_time',
+        'client',
+        'consultation_status',
+    ]
+    list_display = [
+        'create_time',
+        'client',
+        'consultation_status',
     ]
 
 
