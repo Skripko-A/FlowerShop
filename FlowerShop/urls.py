@@ -2,6 +2,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 from FlowerShop.views import show_card, show_catalog, show_consultation, show_main, show_delivery, show_payment, show_quiz, show_quiz_step, show_result
 
