@@ -4,18 +4,21 @@
 {% block title %}Flower Shop{% endblock %}
 
 {% block content %}
-<section id="banner">
-    <div class="container">
-        <div class="banner">
-            <div class="banner__block">
-                <h1 class="banner__title">Мастерская цветов</h1>
-                <p class="banner__text">Подберем для вас букет за два шага, который идеально подойдет под вашу ситуацию</p>
-                <a href="{% url 'quiz' %}" class="btn banner__btn">Подобрать букет</a>
+
+<div class="mainBg">
+    <section id="banner">
+        <div class="container">
+            <div class="banner">
+                <div class="banner__block">
+                    <h1 class="banner__title">Мастерская цветов</h1>
+                    <p class="banner__text">Подберем для вас букет за два шага, который идеально подойдет под вашу ситуацию</p>
+                    <a href="{% url 'quiz' %}" class="btn banner__btn">Подобрать букет</a>
+                </div>
+                <img src="{% static 'img/bannerImg.png' %}" alt="banner Img" class="banner__img">
             </div>
-            <img src="{% static 'img/bannerImg.png' %}" alt="banner Img" class="banner__img">
         </div>
-    </div>
-</section>
+    </section>
+</div>
 
 <section id="recommended">
     <div class="container">
