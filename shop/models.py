@@ -173,7 +173,7 @@ class BouquetManager(models.Manager):
         bouquet_list = []
         for bouquet in Bouquet.objects.filter(recomend=True):
             bouquet_list.append({
-                'tittle': bouquet.title,
+                'title': bouquet.title,
                 'price': bouquet.price,
                 'picture': bouquet.picture,
             })
