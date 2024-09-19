@@ -168,6 +168,31 @@ class Person(models.Model):
         return self.name
 
 
+class BouquetManager(models.Manager):
+    def get_recommended(self):
+        bouquet_list = []
+        for bouquet in Bouquet.objects.filter(recomend=True):
+            bouquet_list.append({
+                'tittle': bouquet.title,
+                'price': bouquet.price,
+                'picture': bouquet.picture,
+            })
+        return bouquet_list
+
+    def get_by_event(self, event):
+        return Bouquet.objects.filter(events=Event.objects.filter(pk=event).first())
+
+    def get_by_price_range(self, range):
+        range = Price_range.objects.get(pk=range)
+        price_min = range.low_line
+        price_max = range.high_line
+        if price_max == price_min == 0:
+            return Bouquet.objects.all()
+        if price_max == 0:
+            return Bouquet.objects.filter(price__gte=price_min)
+        return Bouquet.objects.filter(price__range=(price_min, price_max))
+
+
 class Bouquet(models.Model):
     title = models.CharField('название букета', max_length=200, blank=True)
     description = models.TextField(
@@ -198,6 +223,7 @@ class Bouquet(models.Model):
         verbose_name='события',
         related_name='bouquets',
     )
+    objects = BouquetManager()
 
     def __str__(self):
         return f'торт {self.title} ({self.pk})'
@@ -224,6 +250,11 @@ class Store(models.Model):
         return f'{self.address}({self.phone})'
 
 
+class Price_rangeManager(models.Manager):
+    def get_sort_ranges(self):
+        return Price_range.objects.all().order_by('price_min')
+
+
 class Price_range(models.Model):
     price_min = models.DecimalField(
         max_digits=19,
@@ -235,3 +266,15 @@ class Price_range(models.Model):
         verbose_name='Цена максимум',
         decimal_places=2,
     )
+    objects = Price_rangeManager()
+
+    def get_text(self):
+        if range.price_min == 0 and range.price_max == 0:
+            text = 'Не имеет значения'
+        elif range.price_min == 0:
+            text = f'До {range.price_max} руб'
+        elif range.price_max == 0:
+            text = f'от {range.price_min} руб'
+        else:
+            text = f'{range.price_min} - {range.price_max} руб'
+        return text

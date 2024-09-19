@@ -20,7 +20,7 @@ class OrderedBouquetInline(admin.TabularInline):
 
 @admin.register(Bouquet)
 class BouquetAdmin(admin.ModelAdmin):
-    fields = ['title', 'description', 'price', 'picture', 'recomend', 'preview', 'events']
+    fields = ['title', 'description', 'price', 'picture', 'recomend', 'preview', 'events', 'composition', 'size']
     search_fields = [
         'title',
         'recomend',
