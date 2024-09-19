@@ -32,6 +32,7 @@ def show_card(request):
     context={}
     return render(request, 'card.html', context)
 
+
 def show_consultation(request):
     context={}
     return render(request, 'consultation.html', context)
@@ -43,15 +44,34 @@ def show_payment(request):
 
 
 def show_quiz(request):
-    context = {}
+    events = Event.objects.all()
+    context = {
+        'events': events,
+    }
     return render(request, 'quiz.html', context)
 
 
 def show_quiz_step(request):
-    context = {}
+    button_value = request.POST.get('button_value')
+    request.session['event_id'] = button_value
+
+    price_ranges = Price_range.objects.all()
+
+    context = {
+        'price_ranges': price_ranges,
+    }
     return render(request, 'quiz-step.html', context)
 
 
 def show_result(request):
-    context = {}
+    button_value = request.POST.get('button_value')
+    request.session['price_range_id'] = button_value
+
+    # TODO случай, если букета нет (мб в верстке захардкодить)
+    result = Bouquet.objects.get_by_event(request.session['event_id'])
+    result = result & Bouquet.objects.get_by_price_range(request.session['price_range_id'])
+
+    context = {
+        'result': result.first(),
+    }
     return render(request, 'result.html', context)
