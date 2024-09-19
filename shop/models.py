@@ -169,15 +169,24 @@ class Person(models.Model):
 
 
 class BouquetManager(models.Manager):
-    def get_recommended(self):
+    def get_catalog(self, qt_in_row=3):
         bouquet_list = []
-        for bouquet in Bouquet.objects.filter(recomend=True):
+        row = []
+        for bouquet in Bouquet.objects.all():
+            if len(row) == qt_in_row:
+                bouquet_list.append({
+                    'bouquets_row': row,
+                })
+                row = []
+            row.append(bouquet)
+        if len(row) != 0:
             bouquet_list.append({
-                'title': bouquet.title,
-                'price': bouquet.price,
-                'picture': bouquet.picture,
+                    'bouquets_row': row,
             })
         return bouquet_list
+
+    def get_recommended(self):
+        return Bouquet.objects.filter(recomend=True)
 
     def get_by_event(self, event):
         return Bouquet.objects.filter(events=Event.objects.filter(pk=event).first())

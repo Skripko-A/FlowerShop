@@ -19,7 +19,10 @@ def show_main(request):
 
 
 def show_catalog(request):
-    context = {}
+    context = {
+        'bouquets_rows': Bouquet.objects.get_catalog(3)
+    }
+    print(Bouquet.objects.get_catalog())
     return render(request, 'catalog.html', context)
 
 
