@@ -77,6 +77,9 @@ class ConsultationAdmin(admin.ModelAdmin):
         'client',
         'consultation_status',
     ]
+    readonly_fields = [
+        'create_time',
+    ]
 
 
 @admin.register(Order)
