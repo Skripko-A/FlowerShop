@@ -193,8 +193,8 @@ class BouquetManager(models.Manager):
 
     def get_by_price_range(self, range):
         range = Price_range.objects.get(pk=range)
-        price_min = range.low_line
-        price_max = range.high_line
+        price_min = range.price_min
+        price_max = range.price_max
         if price_max == price_min == 0:
             return Bouquet.objects.all()
         if price_max == 0:
@@ -277,7 +277,7 @@ class Price_range(models.Model):
     )
     objects = Price_rangeManager()
 
-    def get_text(self):
+    def get_text(range):
         if range.price_min == 0 and range.price_max == 0:
             text = 'Не имеет значения'
         elif range.price_min == 0:
