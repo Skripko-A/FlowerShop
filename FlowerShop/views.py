@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.utils.http import urlencode
 from shop.models import (
     Bouquet,
     Order,
@@ -36,7 +38,15 @@ def show_card(request):
 
 
 def show_consultation(request):
-    context={}
+    if request.GET:
+        if 'fname' in request.GET.keys() or 'tel' in request.GET.keys():
+            if request.GET['fname'] and request.GET['tel']:
+                pass
+                #print(request.GET['fname'])
+                #print(request.GET['tel'])
+                # TODO отправить сообщение флористу
+                # TODO сообщить посетителю, что зпрос отправлен и с ним свяжутся
+    context = {}
     return render(request, 'consultation.html', context)
 
 
@@ -66,14 +76,33 @@ def show_quiz_step(request):
 
 
 def show_result(request):
-    button_value = request.POST.get('button_value')
-    request.session['price_range_id'] = button_value
+    if request.GET:
+        fname = ''
+        tel = ''
+        if 'fname' in request.GET.keys() or 'tel' in request.GET.keys():
+            if request.GET['fname'] and request.GET['tel']:
+                fname = request.GET['fname']
+                tel = request.GET['tel']
+                params = {
+                    'fname': fname,
+                    'tel': tel,
+                }
+                # TODO отправить сообщение флористу
+                # TODO сообщить посетителю, что зпрос отправлен и с ним свяжутся
+        return redirect('{}?{}'.format(reverse(show_consultation), urlencode(params)))
+    if not request.session['event_id'] or not request.POST:
+        return redirect(show_main)
+    event_id = request.session['event_id']
+    if request.POST:
+        button_value = request.POST.get('button_value')
+        request.session['price_range_id'] = button_value
 
-    # TODO случай, если букета нет (мб в верстке захардкодить)
-    result = Bouquet.objects.get_by_event(request.session['event_id'])
-    result = result & Bouquet.objects.get_by_price_range(request.session['price_range_id'])
+        # TODO случай, если букета нет (мб в верстке захардкодить)
+        result = Bouquet.objects.get_by_event(event_id)
+        result = result & Bouquet.objects.get_by_price_range(request.session['price_range_id'])
 
-    context = {
-        'result': result.first(),
-    }
+        context = {
+            'result': result.first(),
+            'stores': Store.objects.all(),
+        }
     return render(request, 'result.html', context)
