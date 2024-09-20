@@ -6,6 +6,13 @@
 {% block content %}
 
 <div class="mainBg">
+    {% if messages %}
+        <div id="django-messages">
+            {% for message in messages %}
+                <div class="custom-alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
     <section id="banner">
         <div class="container">
             <div class="banner">
@@ -38,4 +45,29 @@
         </div>
     </div>
 </section>
+
+{% include '_contacts.html' with stores=stores %}
+
+<section id="consultation">
+<div class="container">
+    <div class="consultation">
+        <div class="title consultation__title">Оставьте заявку на консультацию</div>
+        <form action="#" class="consultation__form">
+            <input type="text" name="fname" class="consultation__form_input" placeholder="Введите Имя" required>
+            <input type="text" name="tel" class="consultation__form_input" placeholder="+ 7 (999) 000 00 00" required>
+            <button type="submit" class="consultation__form_btn">Отправить</button>
+        </form>
+    </div>
+</div>
+</section>
+
+<script>
+    window.onload = function() {
+        const messages = document.querySelector('#django-messages .alert');
+        if (messages) {
+            alert(messages.textContent.trim());
+        }
+    };
+</script>
+
 {% endblock %}

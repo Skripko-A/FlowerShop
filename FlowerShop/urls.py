@@ -6,7 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-from FlowerShop.views import show_card, show_catalog, show_consultation, show_main, show_delivery, show_payment, show_quiz, show_quiz_step, show_result
+from FlowerShop.views import show_card, show_catalog, show_consultation, show_main, show_delivery, show_payment, show_quiz, show_quiz_step, show_result, process_payment
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,6 +16,7 @@ urlpatterns = [
     path('card', show_card, name='card'),
     path('consultation', show_consultation, name='consultation'),
     path('payment', show_payment, name='payment'),
+    path('payment/submit/', process_payment, name='process_payment'),
     path('quiz', show_quiz, name='quiz'),
     path('quiz_step', show_quiz_step, name='quiz_step'),
     path('result', show_result, name='result'),
