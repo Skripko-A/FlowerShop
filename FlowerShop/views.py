@@ -61,6 +61,16 @@ def show_consultation(request):
 
 
 def show_payment(request):
+    name = request.POST.get('fname')
+    print(name)
+    phone = request.POST.get('tel')
+    print(phone)
+    address = request.POST.get('address')
+    print(address)
+    order_time = request.POST.get('orderTime')
+    print(order_time)
+    print(f'Name: {name}, Phone: {phone}, Address: {address}, Delivery Time: {order_time}')
+
     context = {}
     return render(request, 'payment.html', context)
 
