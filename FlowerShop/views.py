@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.urls import reverse
 from django.utils.http import urlencode
 from shop.models import (
@@ -11,11 +12,13 @@ from shop.models import (
     Price_range,
     Consultation,
 )
+import datetime
 
 
 def show_main(request):
     context = {
-        'bouquets_recommended': Bouquet.objects.get_recommended()
+        'bouquets_recommended': Bouquet.objects.get_recommended(),
+        'stores': Store.objects.all(),
     }
     return render(request, 'index.html', context)
 
@@ -62,17 +65,85 @@ def show_consultation(request):
 
 def show_payment(request):
     name = request.POST.get('fname')
-    print(name)
     phone = request.POST.get('tel')
-    print(phone)
     address = request.POST.get('address')
-    print(address)
     order_time = request.POST.get('orderTime')
-    print(order_time)
-    print(f'Name: {name}, Phone: {phone}, Address: {address}, Delivery Time: {order_time}')
 
-    context = {}
+    context = {
+        'name': name,
+        'phone_number': phone,
+        'address': address,
+        'order_time': order_time,
+        'delivery_date': datetime.date.today() + datetime.timedelta(days=1),
+    }
     return render(request, 'payment.html', context)
+
+
+def validate_card_number(card_number):
+    # Алгоритм для проверки номера карты
+    def digits_of(n):
+        return [int(d) for d in str(n)]
+    digits = digits_of(card_number)
+    checksum = 0
+    odd_digits = digits[-1::-2]
+    even_digits = digits[-2::-2]
+    checksum += sum(odd_digits)
+    for d in even_digits:
+        checksum += sum(digits_of(d * 2))
+    return checksum % 10 == 0
+
+
+def process_payment(request):
+    if request.method == 'POST':
+        name = request.POST.get('fname')
+        phone_number = request.POST.get('tel')
+        address = request.POST.get('address')
+        order_time = request.POST.get('orderTime')
+        card_num = request.POST.get('cardNum')
+        card_mm = request.POST.get('cardMm')
+        card_gg = request.POST.get('cardGg')
+        card_fname = request.POST.get('cardFname')
+        card_cvc = request.POST.get('cardCvc')
+        email = request.POST.get('mail')
+
+        if validate_card_number(card_num):
+            client, created = Person.objects.get_or_create(
+                phone=phone_number,
+                defaults={'name': name, 'role': '01'},
+            )
+
+            if not created and client.name != name:
+                client.name = name
+                client.save()
+
+            order = Order.objects.create(
+                client=client,
+                address=address,
+                delivery_date=datetime.date.today() + datetime.timedelta(days=1),
+                delivery_time=order_time,
+                order_price=0,
+            )
+
+            # TODO вероятно тут послать сообщение флористу/курьеру
+
+            messages.success(request, 'Заказ оформлен!')
+            return redirect('main')
+        else:
+            messages.error(request, 'Платеж не прошел. Проверьте информацию')
+            return render(request, 'payment', {
+                'card_num': card_num,
+                'card_mm': card_mm,
+                'card_gg': card_gg,
+                'card_fname': card_fname,
+                'card_cvc': card_cvc,
+                'email': email,
+                'name': name,
+                'phone_number': phone_number,
+                'address': address,
+                'order_time': order_time
+            })
+
+    return redirect('payment')
 
 
 def show_quiz(request):

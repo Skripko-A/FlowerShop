@@ -14,6 +14,32 @@
 	font-family: 'Roboto', sans-serif;
 }
 
+
+.custom-alert {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px;
+    background-color: #f0ad4e; /* Change this to the color you want */
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+}
+
+/* Optional: Styling for different message tags */
+.custom-alert.success {
+    background-color: #5cb85c;
+}
+.custom-alert.error {
+    background-color: #d9534f;
+}
+.custom-alert.info {
+    background-color: #5bc0de;
+}
+
 img {
 	max-width: 100%;
 }
