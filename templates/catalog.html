@@ -9,6 +9,7 @@
   		<div class="catalog">
   			<div class="title">Все букеты</div>
   			<div class="catalog__block">
+				{% csrf_token %}
 				{% for bouquets_row in bouquets_rows %}
   				<div class="recommended__elems ficb">
 					{% for bouquet in bouquets_row.bouquets_row %}

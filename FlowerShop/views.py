@@ -28,7 +28,17 @@ def show_catalog(request):
 
 
 def show_delivery(request):
-    context={}
+    button_value = request.POST.get('button_value')
+    time_periods = []
+    for period in Order.TIME_PERIODS:
+        time_periods.append({
+            'id': period[0],
+            'text': period[1],
+        })
+    context = {
+        'time_periods': time_periods,
+        'bouquet_id': button_value,
+    }
     return render(request, 'delivery.html', context)
 
 
