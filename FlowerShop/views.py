@@ -212,14 +212,21 @@ def register_consultation_request(request):
     serializer = ConsultationRequestSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
+    name = serializer.validated_data['name']
+    phone = serializer.validated_data['phone']
+
     ConsultationRequest.objects.create(
-        name=serializer.validated_data['name'],
-        phone=serializer.validated_data['phone'],
+        name=name,
+        phone=phone,
         )
     
-    Person.objects.create(
-        name=serializer.validated_data['name'],
-        phone=serializer.validated_data['phone'],
+    new_client, created = Person.objects.get_or_create(
+        phone=phone,
+        defaults={'name': name}
     )
+
+    if not created and new_client.name != name:
+        new_client.name = name
+        new_client.save()
 
     return Response(serializer.data, status=201)
