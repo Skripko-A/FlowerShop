@@ -25,6 +25,7 @@ def show_main(request):
     context = {
         'bouquets_recommended': Bouquet.objects.get_recommended(),
         'stores': Store.objects.all(),
+        'current_year': datetime.date.today().year,
     }
     return render(request, 'index.html', context)
 
