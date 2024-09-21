@@ -13,12 +13,12 @@
 				{% for bouquets_row in bouquets_rows %}
   				<div class="recommended__elems ficb">
 					{% for bouquet in bouquets_row.bouquets_row %}
-  					<div class="recommended__block recommended__block_first"  style='background-image: url("{% get_media_prefix %}{{ bouquet.picture }}"); background-size: contain;'>
+  					  <div class="recommended__block recommended__block_first"  style='background-image: url("{% get_media_prefix %}{{ bouquet.picture }}"); background-size: contain;'>
   						<div class="recommended__block_elems ficb">
   							<span class="recommended__block_intro">{{ bouquet.title }}</span>
   							<span class="recommended__block_price">{{ bouquet.price }} руб</span>
   						</div>
-  					</div>
+  					  </div>
 					{% endfor %}
   				</div>
 				{% endfor %}
@@ -40,7 +40,7 @@
         </div>
     </div>
   </section>
-
+  
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {
