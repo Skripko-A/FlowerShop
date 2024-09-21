@@ -72,11 +72,18 @@ class Order(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
-    bouquet = models.ManyToManyField(
+    # bouquet = models.ManyToManyField(
+    #     'Bouquet',
+    #     through='OrderedBouquet',
+    #     verbose_name='букеты',
+    #     related_name='orders',
+    # )
+    bouquet = models.ForeignKey(
         'Bouquet',
-        through='OrderedBouquet',
-        verbose_name='букеты',
+        on_delete=models.CASCADE,
+        verbose_name='букет',
         related_name='orders',
+        null=True,
     )
     comment = models.TextField(
         'комментарий к заказу',
