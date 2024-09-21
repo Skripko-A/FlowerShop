@@ -1,7 +1,12 @@
-from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db import transaction
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from django.utils.http import urlencode
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.serializers import CharField, Serializer,ValidationError, ModelSerializer, ListField
 from shop.models import (
     Bouquet,
     Order,
@@ -10,8 +15,9 @@ from shop.models import (
     Event,
     Person,
     Price_range,
-    Consultation,
+    ConsultationRequest,
 )
+
 import datetime
 
 
@@ -197,3 +203,34 @@ def show_result(request):
             'stores': Store.objects.all(),
         }
     return render(request, 'result.html', context)
+
+
+class ConsultationRequestSerializer(ModelSerializer):
+    class Meta:
+        model = ConsultationRequest
+        fields = ['name', 'phone']
+
+
+@api_view(['POST',])
+@csrf_exempt
+@transaction.atomic
+def register_consultation_request(request):
+    '''
+    Данные для тестирования http://127.0.0.1:8000/consultation-request/
+
+    {"name": "Иван", "phone": "+79998887766"}
+    '''
+    serializer = ConsultationRequestSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+
+    ConsultationRequest.objects.create(
+        name=serializer.validated_data['name'],
+        phone=serializer.validated_data['phone'],
+        )
+    
+    Person.objects.create(
+        name=serializer.validated_data['name'],
+        phone=serializer.validated_data['phone'],
+    )
+
+    return Response(serializer.data, status=201)
