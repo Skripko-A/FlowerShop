@@ -287,3 +287,23 @@ class Price_range(models.Model):
         else:
             text = f'{range.price_min} - {range.price_max} руб'
         return text
+
+
+class ConsultationRequest(models.Model):
+    name = models.CharField(
+        verbose_name='Имя', 
+        max_length=25
+        )
+    phone = PhoneNumberField(
+        verbose_name='Номер телефона', 
+        region='RU', 
+        db_index=True
+        )
+    is_closed = models.BooleanField(verbose_name='Обработана?', default='False')
+
+    class Meta:
+        verbose_name = 'Заявка на консультацию'
+        verbose_name_plural = 'Заявки на консультацию'
+
+    def __str__(self):
+        return f'{self.name}, т. {self.phone}'
