@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.html import format_html
+
 from shop.models import (
     Bouquet,
     Order,
@@ -9,7 +11,10 @@ from shop.models import (
     Price_range,
     Consultation,
 )
-from shop.image_preview import image_preview
+
+
+IMAGE_PREVIEW_WIDTH = '300px'
+IMAGE_PREVIEW_HEIGHT = '200px'
 
 
 # Register your models here.
@@ -20,7 +25,7 @@ class OrderedBouquetInline(admin.TabularInline):
 
 @admin.register(Bouquet)
 class BouquetAdmin(admin.ModelAdmin):
-    fields = ['title', 'description', 'price', 'picture', 'recomend', 'preview', 'events', 'composition', 'size']
+    fields = ['title', 'description', 'price', 'picture', 'recomend', 'get_preview', 'events', 'composition', 'size']
     search_fields = [
         'title',
         'recomend',
@@ -28,11 +33,14 @@ class BouquetAdmin(admin.ModelAdmin):
     list_display = [
         'title',
         'recomend',
+        'get_preview'
     ]
-    readonly_fields = ['preview']
+    list_filter = ('events', 'recomend', )
+    readonly_fields = ['get_preview']
 
-    def preview(self, obj):
-        return image_preview(obj)
+    def get_preview(self, img):
+        return format_html('<img src="{}" style="max-width:{}; max-height:{}"/>',
+                           img.picture.url, IMAGE_PREVIEW_WIDTH, IMAGE_PREVIEW_HEIGHT)
 
 
 @admin.register(Event)
