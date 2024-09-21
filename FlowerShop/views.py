@@ -130,18 +130,7 @@ def process_payment(request):
             return redirect('main')
         else:
             messages.error(request, 'Платеж не прошел. Проверьте информацию')
-            return render(request, 'payment', {
-                'card_num': card_num,
-                'card_mm': card_mm,
-                'card_gg': card_gg,
-                'card_fname': card_fname,
-                'card_cvc': card_cvc,
-                'email': email,
-                'name': name,
-                'phone_number': phone_number,
-                'address': address,
-                'order_time': order_time
-            })
+            return redirect('payment')
 
     return redirect('payment')
 
