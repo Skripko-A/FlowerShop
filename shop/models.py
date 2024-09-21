@@ -1,5 +1,5 @@
 from django.db import models
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 class OrderedBouquet(models.Model):
     order = models.ForeignKey(
@@ -155,7 +155,7 @@ class Person(models.Model):
         ('03', 'Флорист'),
     )
     name = models.CharField('Имя', max_length=200)
-    phone = models.CharField('Телефон', max_length=12, unique=True)
+    phone = PhoneNumberField(verbose_name='Телефон', region='RU', unique=True, db_index=True)
     tm_id = models.CharField('ID Телеграм', blank=True, null=True, max_length=20)
     role = models.CharField(
         verbose_name='статус персоны',
