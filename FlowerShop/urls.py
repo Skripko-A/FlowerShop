@@ -1,12 +1,24 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 
 
-from FlowerShop.views import show_card, show_catalog, show_consultation, show_main, show_delivery, show_payment, show_quiz, show_quiz_step, show_result, process_payment
+from FlowerShop.views import (
+    show_card, 
+    show_catalog, 
+    show_consultation, 
+    show_main, show_delivery, 
+    show_payment, 
+    show_quiz, 
+    show_quiz_step, 
+    show_result, 
+    process_payment, 
+    register_consultation_request
+    )
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -20,4 +32,6 @@ urlpatterns = [
     path('quiz', show_quiz, name='quiz'),
     path('quiz_step', show_quiz_step, name='quiz_step'),
     path('result', show_result, name='result'),
+    path('api-auth/', include('rest_framework.urls')),
+    path('consultation-request/', register_consultation_request)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
