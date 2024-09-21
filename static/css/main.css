@@ -192,6 +192,8 @@ bottom: 0;
 .recommended__block {
 	display: flex;
     align-items: end;
+    outline: none;
+    border: none;
 	width: 398px;
 	height: 400px;
 	margin-right: 9px;
