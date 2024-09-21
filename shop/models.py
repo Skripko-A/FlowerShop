@@ -155,7 +155,7 @@ class Person(models.Model):
         ('03', 'Флорист'),
     )
     name = models.CharField('Имя', max_length=200)
-    phone = PhoneNumberField(verbose_name='Телефон', region='RU', db_index=True)
+    phone = PhoneNumberField(verbose_name='Телефон', region='RU', db_index=True, unique=True)
     tm_id = models.CharField('ID Телеграм', blank=True, null=True, max_length=20)
     role = models.CharField(
         verbose_name='статус персоны',
