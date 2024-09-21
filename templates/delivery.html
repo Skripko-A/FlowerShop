@@ -13,6 +13,7 @@
   					<form action="{% url 'payment' %}" method="POST" class="order__form">
 						{% csrf_token %}
   						<div class="order__form_block ficb">
+							<input type="hidden" name="bouquet_id" value="{{ bouquet_id }}">
   							<input type="text" name="fname" class="order__form_input" placeholder="Введите Имя" required>
   							<input type="text" name="tel" class="order__form_input" placeholder="+ 7 (999) 000 00 00" required>
   							<input type="text" name="address" class="order__form_input" placeholder="Адрес доставки" required>

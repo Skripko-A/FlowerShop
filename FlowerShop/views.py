@@ -37,7 +37,7 @@ def show_catalog(request):
 
 
 def show_delivery(request):
-    button_value = request.POST.get('button_value')
+    bouquet_id = request.POST.get('bouquet_id')
     time_periods = []
     for period in Order.TIME_PERIODS:
         time_periods.append({
@@ -46,7 +46,7 @@ def show_delivery(request):
         })
     context = {
         'time_periods': time_periods,
-        'bouquet_id': button_value,
+        'bouquet_id': bouquet_id,
     }
     return render(request, 'delivery.html', context)
 
@@ -70,12 +70,14 @@ def show_consultation(request):
 
 
 def show_payment(request):
+    bouquet_id = request.POST.get('bouquet_id')
     name = request.POST.get('fname')
     phone = request.POST.get('tel')
     address = request.POST.get('address')
     order_time = request.POST.get('orderTime')
 
     context = {
+        'bouquet_id': bouquet_id,
         'name': name,
         'phone_number': phone,
         'address': address,
@@ -101,6 +103,7 @@ def validate_card_number(card_number):
 
 def process_payment(request):
     if request.method == 'POST':
+        bouquet_id = request.POST.get('bouquete_id')
         name = request.POST.get('fname')
         phone_number = request.POST.get('tel')
         address = request.POST.get('address')
@@ -128,6 +131,7 @@ def process_payment(request):
                 delivery_date=datetime.date.today() + datetime.timedelta(days=1),
                 delivery_time=order_time,
                 order_price=0,
+                bouquet=Bouquet.objects.get(pk=bouquet_id),
             )
 
             # TODO вероятно тут послать сообщение флористу/курьеру

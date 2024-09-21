@@ -20,10 +20,11 @@
   					<form action="{% url 'process_payment' %}" method="POST" class="order__form orderStep_form">
 						{% csrf_token %}
 
-					<input type="hidden" name="fname" value="{{ name }}">
-					<input type="hidden" name="tel" value="{{ phone_number }}">
-					<input type="hidden" name="address" value="{{ address }}">
-					<input type="hidden" name="orderTime" value="{{ order_time }}">
+						<input type="hidden" name="bouquete_id" value="{{ bouquet_id }}">
+						<input type="hidden" name="fname" value="{{ name }}">
+						<input type="hidden" name="tel" value="{{ phone_number }}">
+						<input type="hidden" name="address" value="{{ address }}">
+						<input type="hidden" name="orderTime" value="{{ order_time }}">
 
   						<div class="order__form_block">
   							<div class="order__form_items">
