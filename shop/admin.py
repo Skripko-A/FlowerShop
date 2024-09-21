@@ -10,6 +10,7 @@ from shop.models import (
     Person,
     Price_range,
     Consultation,
+    ConsultationRequest
 )
 
 
@@ -127,3 +128,10 @@ class OrderedBouquetAdmin(admin.ModelAdmin):
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'tm_id', 'role')
 #    readonly_fields = ('name', 'phone', 'tm_id', 'role')
+
+
+@admin.register(ConsultationRequest)
+class ConsultationRequestAdmin(admin.ModelAdmin):
+    list_display = ('name', 'phone', 'is_closed', )
+    list_filter = ('is_closed', )
+    search_fields = ('phone', )
