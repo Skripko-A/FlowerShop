@@ -13,12 +13,12 @@
 				{% for bouquets_row in bouquets_rows %}
   				<div class="recommended__elems ficb">
 					{% for bouquet in bouquets_row.bouquets_row %}
-  					<div class="recommended__block recommended__block_first"  style='background-image: url("{% get_media_prefix %}{{ bouquet.picture }}"); background-size: contain;'>
+  					  <div class="recommended__block recommended__block_first"  style='background-image: url("{% get_media_prefix %}{{ bouquet.picture }}"); background-size: contain;'>
   						<div class="recommended__block_elems ficb">
   							<span class="recommended__block_intro">{{ bouquet.title }}</span>
   							<span class="recommended__block_price">{{ bouquet.price }} руб</span>
   						</div>
-  					</div>
+  					  </div>
 					{% endfor %}
   				</div>
 				{% endfor %}
@@ -28,15 +28,42 @@
   	</div>
   </section>
   <section id="consultation">
-  	<div class="container">
-  		<div class="consultation">
-  			<div class="title consultation__title">Оставьте заявку на консультацию</div>
-  			<form action="#" class="consultation__form">
-  				<input type="text" name="fname" class="consultation__form_input" placeholder="Введите Имя" required>
-  				<input type="text" name="tel" class="consultation__form_input" placeholder="+ 7 (999) 000 00 00" required>
-  				<button type="submit" class="consultation__form_btn">Отправить</button>
-  			</form>
-  		</div>
-  	</div>
+    <div class="container">
+        <div class="consultation">
+            <div class="title consultation__title">Оставьте заявку на консультацию</div>
+            <form id="consultation-form" class="consultation__form">
+                <input type="text" name="name" class="consultation__form_input" placeholder="Введите Имя" required>
+                <input type="text" name="phone" class="consultation__form_input" placeholder="+ 7 (999) 000 00 00" required>
+                <button type="submit" class="consultation__form_btn">Отправить</button>
+            </form>
+            <div id="response-message" style="display:none;"></div>
+        </div>
+    </div>
   </section>
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+        $('#consultation-form').on('submit', function(e) {
+            e.preventDefault(); // Отменяем стандартное поведение формы
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://127.0.0.1:8000/consultation-request/', // URL вашего API
+                data: {
+                    name: $('input[name="name"]').val(),
+                    phone: $('input[name="phone"]').val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}', // Добавляем CSRF токен
+                },
+                success: function(response) {
+                    $('#response-message').html('Заявка успешно отправлена!').show();
+                    $('#consultation-form')[0].reset(); // Очищаем форму
+                },
+                error: function(xhr) {
+                    $('#response-message').html('Ошибка при отправке заявки. Попробуйте еще раз.').show();
+                }
+            });
+        });
+    });
+  </script>
 {% endblock %}
