@@ -17,6 +17,7 @@ from shop.models import (
     Price_range,
     ConsultationRequest,
 )
+from shop.bot_functions import send_message_of_consultation, send_message_of_new_order
 
 import datetime
 
@@ -61,9 +62,9 @@ def show_consultation(request):
     if request.GET:
         if 'fname' in request.GET.keys() or 'tel' in request.GET.keys():
             if request.GET['fname'] and request.GET['tel']:
-                pass
-                #print(request.GET['fname'])
-                #print(request.GET['tel'])
+                fname = request.GET['fname']
+                tel = request.GET['tel']
+                send_message_of_consultation(fname, tel)
                 # TODO отправить сообщение флористу
                 # TODO сообщить посетителю, что зпрос отправлен и с ним свяжутся
     context = {}
@@ -136,6 +137,7 @@ def process_payment(request):
             )
 
             # TODO вероятно тут послать сообщение флористу/курьеру
+            send_message_of_new_order(client.name, client.phone, order.pk)
 
             messages.success(request, 'Заказ оформлен!')
             return redirect('main')
@@ -178,6 +180,7 @@ def show_result(request):
                     'fname': fname,
                     'tel': tel,
                 }
+#                send_message_of_consultation(fname, tel)
                 # TODO отправить сообщение флористу
                 # TODO сообщить посетителю, что зпрос отправлен и с ним свяжутся
         return redirect('{}?{}'.format(reverse(show_consultation), urlencode(params)))
@@ -224,7 +227,7 @@ def register_consultation_request(request):
         name=name,
         phone=phone,
         )
-    
+
     new_client, created = Person.objects.get_or_create(
         phone=phone,
         defaults={'name': name}

@@ -12,6 +12,7 @@ from shop.models import (
     Consultation,
     ConsultationRequest
 )
+from shop.bot_functions import send_message_of_new_delivery
 
 
 IMAGE_PREVIEW_WIDTH = '300px'
@@ -108,6 +109,12 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [
         OrderedBouquetInline,
     ]
+
+    def save_model(self, request, obj, form, change):
+        if change and obj.order_status == '03':
+            send_message_of_new_delivery(obj.client.name, obj.client.phone, obj)
+        return super().save_model(request, obj, form, change)
+
 
 
 @admin.register(OrderedBouquet)

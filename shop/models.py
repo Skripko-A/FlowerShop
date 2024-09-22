@@ -123,7 +123,7 @@ class Order(models.Model):
         delivery_date = str(self.delivery_date)
         delivery_period = dict(self.TIME_PERIODS)[self.delivery_time]
         order_status = dict(self.STATUSES)[self.order_status]
-        return f'{delivery_date} - {delivery_period} ({order_status})'
+        return f'{ self.bouquet }. {delivery_date} - {delivery_period} ({order_status})'
 
     def get_price(self):
         ordered_bouquets = self.ordered_bouquets.all()
@@ -307,6 +307,11 @@ class ConsultationRequest(models.Model):
         db_index=True
         )
     is_closed = models.BooleanField(verbose_name='Обработана?', default='False')
+    message_id = models.CharField(
+        verbose_name='Ключ сообщения телеграмм', 
+        max_length=25,
+        blank=True,
+        )
 
     class Meta:
         verbose_name = 'Заявка на консультацию'
