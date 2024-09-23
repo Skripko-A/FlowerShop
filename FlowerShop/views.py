@@ -228,6 +228,7 @@ def register_consultation_request(request):
         phone=phone,
         )
 
+    send_message_of_consultation(name, phone)
 
     new_client, created = Person.objects.get_or_create(
         phone=phone,
