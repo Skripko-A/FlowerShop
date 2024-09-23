@@ -57,7 +57,7 @@ https://t.me/dvmn_command_2024_09_bot
    python manage.py migrate
    ```
 
-4. Создайте файл .env по образцу
+4. Создайте файл .env по [образцу](https://github.com/Skripko-A/FlowerShop/blob/main/example.env)
 ```
 TM_BOT_TOKEN='Токен вашего телеграм бота'
 SECRET_KEY='SECRETKEY вашего приложения'
