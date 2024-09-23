@@ -23,6 +23,7 @@ def send_message_of_consultation(name, tel):
 
 
 def send_message_of_new_order(name, tel, order_num):
+    print('order message to florist')
     florist = Person.objects.filter(role='03').first()
     bot.send_message(
         chat_id=florist.tm_id,

@@ -203,6 +203,7 @@ def send_order_to_delivery(message: telebot.types.Message, order_id):
     order = Order.objects.filter(pk=order_id).first()
     order.is_closedorder_status = '03'
     order.save()
+    send_message_of_new_delivery(order.client.name, order.client.phone, order)
     bot.edit_message_text(
         chat_id=message.chat.id,
         message_id=user['msg_id_2'],
@@ -210,7 +211,6 @@ def send_order_to_delivery(message: telebot.types.Message, order_id):
             'Что будем делать дальше?.',
         reply_markup=markup_florist
     )
-    send_message_of_new_delivery(order.client.name, order.client.phone, order)
 
 
 @bot.message_handler(commands=['start'])
@@ -223,18 +223,18 @@ def handle_buttons(call):
     user = check_user_in_cache(call.message)
     if not user:
         return
-    if call.data == 'get_open_consultation_requests':
-        get_open_consultation_requests(call.message)
-    elif call.data == 'menu_florist':
+    if call.data == 'menu_florist':
         menu_florist(call.message)
+    elif call.data == 'get_orders':
+        get_orders(call.message)
+    elif call.data == 'get_open_consultation_requests':
+        get_open_consultation_requests(call.message)
     elif user['next_menu_name'] == 'get_open_consultation_request':
         get_open_consultation_request(call.message, call.data)
     elif user['next_menu_name'] == 'get_order':
         get_order(call.message, call.data)
-    elif call.data == 'get_orders':
-        get_orders(call.message)
     elif user['next_menu_name'] == 'send_order_to_delivery':
-        get_order(call.message, call.data)
+        send_order_to_delivery(call.message, call.data)
     elif user['next_menu_name'] == 'close_consultation':
         close_consultation(call.message, call.data)
 

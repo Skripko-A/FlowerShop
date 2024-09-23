@@ -175,6 +175,9 @@ def process_payment(request):
         order_price=0,
         bouquet=Bouquet.objects.get(pk=bouquet_id),
     )
+
+    send_message_of_new_order(client.name, client.phone, new_order)
+
     messages.success(request, 'Заказ оформлен!')
     return Response({'success': True, 'redirect_url': 'main'}, status=201)
     #return redirect('main')
