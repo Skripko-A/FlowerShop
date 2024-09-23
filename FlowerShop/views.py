@@ -64,6 +64,20 @@ def show_consultation(request):
             if request.GET['fname'] and request.GET['tel']:
                 fname = request.GET['fname']
                 tel = request.GET['tel']
+                ConsultationRequest.objects.create(
+                    name=fname,
+                    phone=tel,
+                )
+
+                new_client, created = Person.objects.get_or_create(
+                    phone=tel,
+                    defaults={'name': fname}
+                )
+
+                if not created and new_client.name != fname:
+                    new_client.name = fname
+                    new_client.save()
+
                 send_message_of_consultation(fname, tel)
                 # TODO отправить сообщение флористу
                 # TODO сообщить посетителю, что зпрос отправлен и с ним свяжутся
@@ -227,8 +241,6 @@ def register_consultation_request(request):
         name=name,
         phone=phone,
         )
-
-    send_message_of_consultation(name, phone)
 
     new_client, created = Person.objects.get_or_create(
         phone=phone,

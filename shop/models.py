@@ -299,20 +299,15 @@ class Price_range(models.Model):
 
 class ConsultationRequest(models.Model):
     name = models.CharField(
-        verbose_name='Имя', 
+        verbose_name='Имя',
         max_length=25
         )
     phone = PhoneNumberField(
-        verbose_name='Номер телефона', 
-        region='RU', 
+        verbose_name='Номер телефона',
+        region='RU',
         db_index=True
         )
     is_closed = models.BooleanField(verbose_name='Обработана?', default='False')
-    message_id = models.CharField(
-        verbose_name='Ключ сообщения телеграмм', 
-        max_length=25,
-        blank=True,
-        )
 
     class Meta:
         verbose_name = 'Заявка на консультацию'

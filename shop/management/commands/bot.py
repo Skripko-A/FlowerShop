@@ -227,6 +227,8 @@ def handle_buttons(call):
         return
     if call.data == 'get_open_consultation_requests':
         get_open_consultation_requests(call.message)
+    elif call.data == 'menu_florist':
+        menu_florist(call.message)
     elif user['next_menu_name'] == 'get_open_consultation_request':
         get_open_consultation_request(call.message, call.data)
     elif call.data == 'get_orders':
@@ -235,12 +237,10 @@ def handle_buttons(call):
         get_order(call.message, call.data)
     elif user['next_menu_name'] == 'send_order_to_delivery':
         get_order(call.message, call.data)
-    elif call.data == 'menu_florist':
-        menu_florist(call.message)
     elif user['next_menu_name'] == 'close_consultation':
         close_consultation(call.message, call.data)
 
-
+'''
 def bot_thread():
     bot.remove_webhook()
     bot.polling(none_stop=True, interval=1)
@@ -249,7 +249,7 @@ def bot_thread():
 t = Thread(target=bot_thread)
 t.setDaemon(True)
 t.start()
-
+'''
 '''
 class Command(BaseCommand):
     help = 'Запуск чат-бота'
