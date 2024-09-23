@@ -111,6 +111,7 @@ class Order(models.Model):
         max_length=2,
         choices=TIME_PERIODS,
         blank=True,
+        default='01'
     )
     order_status = models.CharField(
         verbose_name='статус заказа',
