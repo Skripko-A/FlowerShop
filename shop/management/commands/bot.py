@@ -240,7 +240,8 @@ def handle_buttons(call):
     elif user['next_menu_name'] == 'close_consultation':
         close_consultation(call.message, call.data)
 
-'''
+#bot.polling(none_stop=True, interval=1)
+
 def bot_thread():
     bot.remove_webhook()
     bot.polling(none_stop=True, interval=1)
@@ -249,11 +250,4 @@ def bot_thread():
 t = Thread(target=bot_thread)
 t.setDaemon(True)
 t.start()
-'''
-'''
-class Command(BaseCommand):
-    help = 'Запуск чат-бота'
 
-    def handle(self, *args, **options):
-        pass
-'''
