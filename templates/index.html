@@ -76,7 +76,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://127.0.0.1:8000/consultation-request/', // URL вашего API
+                url: '{% url "constulation-request" %}',
                 data: {
                     name: $('input[name="name"]').val(),
                     phone: $('input[name="phone"]').val(),
