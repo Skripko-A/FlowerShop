@@ -245,10 +245,10 @@ def handle_buttons(call):
         menu_florist(call.message)
     elif user['next_menu_name'] == 'get_open_consultation_request':
         get_open_consultation_request(call.message, call.data)
-    elif call.data == 'get_orders':
-        get_orders(call.message)
     elif user['next_menu_name'] == 'get_order':
         get_order(call.message, call.data)
+    elif call.data == 'get_orders':
+        get_orders(call.message)
     elif user['next_menu_name'] == 'send_order_to_delivery':
         get_order(call.message, call.data)
     elif user['next_menu_name'] == 'close_consultation':
