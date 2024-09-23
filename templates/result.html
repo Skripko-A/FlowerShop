@@ -33,7 +33,7 @@
   					<div class="title result__items_title">{{ result.title }}</div>
   					<div class="result__items_price">{{ result.price }} руб</div>
 <!--  					<button class="btn result__items_btn" type="submit" value="{{ result.id }}" onclick="location.href='{% url 'delivery' %}'">Заказать букет</button>-->
-  					<form id="orderForm" action="{% url 'delivery' %}" method="POST">
+  					<form id="orderForm" action="{% url 'pay-delivery' %}" method="POST">
 						{% csrf_token %}
 						<input type="hidden" name="bouquet_id" value="{{ result.id }}">
 						<button class="btn result__items_btn" type="submit">Заказать букет</button>

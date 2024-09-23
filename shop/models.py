@@ -243,7 +243,7 @@ class Bouquet(models.Model):
     objects = BouquetManager()
 
     def __str__(self):
-        return f'торт {self.title} ({self.pk})'
+        return f'{self.title} ({self.pk})'
 
 
 class Event(models.Model):
