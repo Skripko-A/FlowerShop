@@ -30,15 +30,3 @@ def send_message_of_new_order(name, tel, order_num):
         f'Создан заказ номер { order_num } от покупателя по имени {name}, телефон {tel}.',
         reply_markup=markup_florist
     )
-
-
-def send_message_of_new_delivery(name, tel, order):
-    courier = Person.objects.filter(role='02').first()
-    time = order.get_time()
-    bot.send_message(
-        chat_id=courier.tm_id,
-        text=f'Доброго дня.\n'
-        f'Pаказ номер { order.id } для покупателя по имени {name}, телефон {tel} собран.\n'
-        f'Требуется доставить его по адресу: { order.address }.\n'
-        f'Время доставки сегодня { time }.',
-    )

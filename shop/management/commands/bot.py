@@ -16,6 +16,7 @@ from shop.models import (
     ConsultationRequest,
 )
 
+
 env = Env()
 env.read_env()
 
@@ -27,6 +28,18 @@ markup_florist = quick_markup({
     'Посмотреть заказы': {'callback_data': 'get_orders'},
     'Посмотреть открытые заявки на консультации': {'callback_data': 'get_open_consultation_requests'},
 }, row_width=1)
+
+
+def send_message_of_new_delivery(name, tel, order):
+    courier = Person.objects.filter(role='02').first()
+    time = order.get_time()
+    bot.send_message(
+        chat_id=courier.tm_id,
+        text=f'Доброго дня.\n'
+        f'Pаказ номер { order.id } для покупателя по имени {name}, телефон {tel} собран.\n'
+        f'Требуется доставить его по адресу: { order.address }.\n'
+        f'Время доставки сегодня { time }.',
+    )
 
 
 def check_user_in_cache(msg: telebot.types.Message):
@@ -193,6 +206,7 @@ def send_order_to_delivery(message: telebot.types.Message, order_id):
             'Что будем делать дальше?.',
         reply_markup=markup_florist
     )
+    send_message_of_new_delivery(order.client.name, order.client.phone, order)
 
 
 def get_speaker_buttons(message: telebot.types.Message, call):

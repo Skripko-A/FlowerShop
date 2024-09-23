@@ -12,7 +12,6 @@ from shop.models import (
     Consultation,
     ConsultationRequest
 )
-from shop.bot_functions import send_message_of_new_delivery, send_message_of_consultation
 
 
 IMAGE_PREVIEW_WIDTH = '300px'
@@ -110,11 +109,6 @@ class OrderAdmin(admin.ModelAdmin):
         OrderedBouquetInline,
     ]
 
-    def save_model(self, request, obj, form, change):
-        if change and obj.order_status == '03':
-            send_message_of_new_delivery(obj.client.name, obj.client.phone, obj)
-        return super().save_model(request, obj, form, change)
-
 
 @admin.register(OrderedBouquet)
 class OrderedBouquetAdmin(admin.ModelAdmin):
@@ -141,8 +135,3 @@ class ConsultationRequestAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'is_closed', )
     list_filter = ('is_closed', )
     search_fields = ('phone', )
-
-    def save_model(self, request, obj, form, change):
-        if change and obj.is_closed:
-            send_message_of_consultation(obj.name, obj.phone)
-        return super().save_model(request, obj, form, change)
