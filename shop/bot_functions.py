@@ -9,7 +9,7 @@ from shop.models import (
     Price_range,
     ConsultationRequest,
 )
-from shop.management.commands.bot import markup_florist
+from shop.management.commands.bot import main_florist
 
 
 def send_message_of_consultation(name, tel):
@@ -18,7 +18,7 @@ def send_message_of_consultation(name, tel):
         chat_id=florist.tm_id,
         text=f'Доброго дня.\n'
         f'Поступила заявка на консультацию от покупателя по имени {name}, телефон {tel}.',
-        reply_markup=markup_florist
+        reply_markup=main_florist
     )
 
 
@@ -28,5 +28,5 @@ def send_message_of_new_order(name, tel, order_num):
         chat_id=florist.tm_id,
         text=f'Доброго дня.\n'
         f'Создан заказ номер { order_num } от покупателя по имени {name}, телефон {tel}.',
-        reply_markup=markup_florist
+        reply_markup=main_florist
     )

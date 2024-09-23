@@ -29,6 +29,10 @@ markup_florist = quick_markup({
     'Посмотреть открытые заявки на консультации': {'callback_data': 'get_open_consultation_requests'},
 }, row_width=1)
 
+main_florist = quick_markup({
+    'Перейти в меню.': {'callback_data': 'menu_florist'},
+}, row_width=1)
+
 
 def send_message_of_new_delivery(name, tel, order):
     courier = Person.objects.filter(role='02').first()
@@ -88,12 +92,12 @@ def start_bot(message: telebot.types.Message):
 
 def menu_florist(message: telebot.types.Message):
     user = payload[message.chat.id]    
-    bot.edit_message_text(
+    msg = bot.send_message(
         chat_id=message.chat.id,
-        message_id=user['msg_id_2'],
         text='Что будем делать?.',
         reply_markup=markup_florist
     )
+    user['msg_id_2'] = msg.id
 
 
 def get_open_consultation_requests(message: telebot.types.Message):
@@ -207,26 +211,6 @@ def send_order_to_delivery(message: telebot.types.Message, order_id):
         reply_markup=markup_florist
     )
     send_message_of_new_delivery(order.client.name, order.client.phone, order)
-
-
-def get_speaker_buttons(message: telebot.types.Message, call):
-    user = payload[message.chat.id]
-    buttons = {}
-    reports = db_functions.get_reports()
-    for report in reports[user['sheet']:user['sheet']+2]:
-        name = report.speaker.name
-        user['code_reports'].append(str(report.id))
-        theme = report.theme
-        buttons.update({f'{name} - {theme}': {'callback_data': report.id}})
-    user['sheet'] += 2
-    if user['sheet'] < len(reports):
-        buttons.update({'Еще доклады': {'callback_data': 'choice_speaker'}})
-    else:
-        user['sheet'] = 0
-    buttons.update({'Вернуться в меню': {'callback_data': 'main_menu'}})
-    markup = get_markup(buttons)
-    bot.edit_message_text(chat_id=message.chat.id, message_id=user['msg_id_2'],
-                          text=f'Выберите доклад', reply_markup=markup)
 
 
 @bot.message_handler(commands=['start'])
