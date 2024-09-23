@@ -111,6 +111,7 @@ class Order(models.Model):
         max_length=2,
         choices=TIME_PERIODS,
         blank=True,
+        default='01'
     )
     order_status = models.CharField(
         verbose_name='статус заказа',
@@ -123,7 +124,7 @@ class Order(models.Model):
         delivery_date = str(self.delivery_date)
         delivery_period = dict(self.TIME_PERIODS)[self.delivery_time]
         order_status = dict(self.STATUSES)[self.order_status]
-        return f'{delivery_date} - {delivery_period} ({order_status})'
+        return f'{ self.bouquet }. {delivery_date} - {delivery_period} ({order_status})'
 
     def get_price(self):
         ordered_bouquets = self.ordered_bouquets.all()
@@ -298,12 +299,12 @@ class Price_range(models.Model):
 
 class ConsultationRequest(models.Model):
     name = models.CharField(
-        verbose_name='Имя', 
+        verbose_name='Имя',
         max_length=25
         )
     phone = PhoneNumberField(
-        verbose_name='Номер телефона', 
-        region='RU', 
+        verbose_name='Номер телефона',
+        region='RU',
         db_index=True
         )
     is_closed = models.BooleanField(verbose_name='Обработана?', default='False')

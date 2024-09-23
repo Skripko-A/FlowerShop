@@ -1,5 +1,9 @@
 import os
 from pathlib import Path
+from environs import Env
+
+env = Env()
+env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,9 +29,10 @@ MEDIA_URL = '/media/'
 
 SECRET_KEY = 'django-insecure-g!8+sgr=j984f3jbs0+84&ce6fkb*s7z(engr$y0)afsq9j1e!'
 
-DEBUG = True
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env.bool('DEBUG', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
