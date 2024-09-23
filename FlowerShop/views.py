@@ -72,17 +72,17 @@ def show_consultation(request):
 
 def show_payment(request):
     bouquet_id = request.POST.get('bouquet_id')
-    name = request.POST.get('fname')
-    phone = request.POST.get('tel')
+    name = request.POST.get('name')
+    phone = request.POST.get('phone')
     address = request.POST.get('address')
-    order_time = request.POST.get('orderTime')
+    order_time = request.POST.get('delivery_time')
 
     context = {
         'bouquet_id': bouquet_id,
         'name': name,
-        'phone_number': phone,
+        'phone': phone,
         'address': address,
-        'order_time': order_time,
+        'delivery_time': order_time,
         'delivery_date': datetime.date.today() + datetime.timedelta(days=1),
     }
     return render(request, 'payment.html', context)
@@ -102,48 +102,95 @@ def validate_card_number(card_number):
     return checksum % 10 == 0
 
 
+class OrderSerializer(ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['address', 'delivery_time']
+
+class ClientSerializer(ModelSerializer):
+    class Meta:
+        model = Person
+        fields = ['name', 'phone']
+
+
+@api_view(['POST'])
+@transaction.atomic
 def process_payment(request):
-    if request.method == 'POST':
-        bouquet_id = request.POST.get('bouquete_id')
-        name = request.POST.get('fname')
-        phone_number = request.POST.get('tel')
-        address = request.POST.get('address')
-        order_time = request.POST.get('orderTime')
-        card_num = request.POST.get('cardNum')
-        card_mm = request.POST.get('cardMm')
-        card_gg = request.POST.get('cardGg')
-        card_fname = request.POST.get('cardFname')
-        card_cvc = request.POST.get('cardCvc')
-        email = request.POST.get('mail')
+    '''Данные для тестирования:
+    http://127.0.0.1:8000/order-register/
+    {"name": "Клиентик",
+    "phone": "+79876545577",
+    "address": "Stalins street 10",
+    "delivery_time": "02",
+    "bouquet_id": 1,
+    "cardNum": "2222111111111111"}'''
 
-        if validate_card_number(card_num):
-            client, created = Person.objects.get_or_create(
-                phone=phone_number,
-                defaults={'name': name, 'role': '01'},
-            )
+    order_serializer = OrderSerializer(data=request.data)
+    if Person.objects.filter(phone=request.data['phone']):
+        client = Person.objects.get(phone=request.data['phone'])
+        if client.name != request.data['name']:
+            client.name = request.data['name']
+            client.save()
+    else:
+        client_serializer = ClientSerializer(data=request.data)
+        try:
+            client_serializer.is_valid(raise_exception=True)
+            client = client_serializer.save()
+        except ValidationError as e:
+            return Response({'errors': e.detail}, status=400)
+    print(client)        
+    try:
+        order_serializer.is_valid(raise_exception=True)
+    except ValidationError as e:
+        return Response({'errors': e.detail}, status=400)
+    address = order_serializer.validated_data['address']
+    delivery_time = order_serializer.validated_data['delivery_time']
 
-            if not created and client.name != name:
-                client.name = name
-                client.save()
+    bouquet_id = request.data['bouquet_id']
+    card_num = request.data['cardNum']
 
-            order = Order.objects.create(
-                client=client,
-                address=address,
-                delivery_date=datetime.date.today() + datetime.timedelta(days=1),
-                delivery_time=order_time,
-                order_price=0,
-                bouquet=Bouquet.objects.get(pk=bouquet_id),
-            )
+    if not validate_card_number(card_num):
+        raise ValidationError
 
-            # TODO вероятно тут послать сообщение флористу/курьеру
+    new_order = Order.objects.create(
+        client=client,
+        address=address,
+        delivery_date=datetime.date.today() + datetime.timedelta(days=1),
+        delivery_time=delivery_time,
+        order_price=0,
+        bouquet=Bouquet.objects.get(pk=bouquet_id),
+    )
+    messages.success(request, 'Заказ оформлен!')
+    return Response({'success': True, 'redirect_url': 'main'}, status=201)
+    #return redirect('main')
+       # TODO вероятно тут послать сообщение флористу/курьеру
 
-            messages.success(request, 'Заказ оформлен!')
-            return redirect('main')
-        else:
-            messages.error(request, 'Платеж не прошел. Проверьте информацию')
-            return redirect('payment')
 
-    return redirect('payment')
+def show_pay_delivery(request):
+    time_periods = []
+    for period in Order.TIME_PERIODS:
+        time_periods.append({
+            'id': period[0],
+            'text': period[1],
+        })
+
+    bouquet_id = request.POST.get('bouquet_id')
+    name = request.POST.get('name')
+    phone = request.POST.get('phone')
+    address = request.POST.get('address')
+    order_time = request.POST.get('delivery_time')
+
+    context = {
+        'bouquet_id': bouquet_id,
+        'name': name,
+        'phone': phone,
+        'address': address,
+        'time_periods': time_periods,
+        'delivery_time': order_time,
+        'delivery_date': datetime.date.today() + datetime.timedelta(days=1),
+    }
+    return render(request, 'pay_delivery.html', context)
+
 
 
 def show_quiz(request):
